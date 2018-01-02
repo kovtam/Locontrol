@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Model Details" xmlns:model="PackLocoCTRL.model.*">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+	<model:Device id="employee"/>
+		
+		
+		<fx:Component className="AlertMsg">
+            <s:SkinnablePopUpContainer x="70" y="300">
+                <s:TitleWindow title="My Message" close="close()">
+                    <s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+                        <s:Label text="My alert message text here..."/>
+                        <s:Button label="OK" click="close()"/>
+                    </s:VGroup>
+                </s:TitleWindow>
+            </s:SkinnablePopUpContainer>
+        </fx:Component>
+		
+		
+		
+		
+	</fx:Declarations>
+	
+	<s:navigationContent>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/home.png')"
+				  click="navigator.popToFirstView()"/>
+		
+		
+        <s:Button id="deleteBtn" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="(new AlertMsg()).open(this, false)"/>
+		
+		<s:Button id="backBtn" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="navigator.popToFirstView()"/>
+		<s:Button id="backBtn2" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="backBtn2_clickHandler(event)"/>
+		
+		
+		
+	</s:navigationContent>
+	
+	
+	
+	
+	
+	
+	<fx:Script>
+      <![CDATA[
+	  
+	  
+			
+	  
+         
+         protected function backBtn2_clickHandler(event:MouseEvent):void
+         {
+            navigator.popView();
+         }
+         protected function deleteBtn_clickHandler(event:MouseEvent):void
+         {
+           // deleteEmployeeResult.token = employeeService.deleteEmployee(data as int);
+		   
+		   //new AlertMsg()).open(this, false);
+		   
+         }
+         //protected function deleteEmployeeResult_resultHandler(event:ResultEvent):void
+         //{
+            //navigator.popView();
+         //}
+      ]]>
+   </fx:Script>
+	
+	
+	
+	
+</s:View>

@@ -1,0 +1,679 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:custom="PackLocoCTRL.model.*"
+		
+		
+	
+		creationComplete="init()"
+		title="Model Controls">
+		
+		
+	
+	<fx:Script>
+		<![CDATA[
+			import flash.display.Stage;
+			import mx.collections.ArrayCollection;
+			
+			
+			import flash.events.*;
+			
+			import spark.events.IndexChangeEvent;
+			
+			
+			
+			import mx.events.ResizeEvent;
+			
+			import spark.components.ViewNavigator;
+			
+			import flash.events.TimerEvent;
+	
+            import flash.utils.Timer;
+			import flash.filesystem.File;
+			
+			import flash.system.Capabilities;
+
+			import flash.display.Stage;
+			
+			
+			import PackLocoCTRL.model.SelectionList;
+			
+			//import flash.net.*;
+			
+			
+			
+			private var t:Timer;
+			
+			private var t2:Timer;
+			
+			
+			
+			private var pathToFile:String = File.documentsDirectory.url;
+			
+			private var pathToFileApD:String = File.applicationDirectory.url;
+			
+			private var devpicname:String;
+			
+			
+				
+			private var screenWidth:Number = Capabilities.screenResolutionX;
+			private var screenHeight:Number = Capabilities.screenResolutionY;
+			
+			private var actual_speed:int = 0;
+			private var target_speed:int = 0;
+			private var slidersp_ex_allowed:Boolean = false;
+			private var timer2hasexprd:Boolean = false;
+			
+			
+			private var speed_slide_status:String = "INACTIVE";
+			
+			
+			[Bindable]
+			protected var actions:ArrayCollection;
+			
+			[Bindable]
+			public var mesvar:String;
+			
+			
+			[Embed("/PackLocoCTRL/assets/play.png")]
+			private var playIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/stop.png")]
+			private var stopIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/back.png")]
+			private var rewindIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/cancel.png")]
+			private var haltIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/plus.png")]
+			private var plusIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/minus.png")]
+			private var minusIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/power.png")]
+			private var powerIcon:Class;
+			
+			[Embed("/PackLocoCTRL/assets/check-1.png")]
+			private var textIcon:Class;
+
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+				actions = new ArrayCollection();
+				
+				
+				
+				
+				switch (data.subsys)
+				
+				{
+				case "Locomotives":
+				
+					actions.addItem({
+						type: "start", 
+						name: "Motion:START", 
+						details: data.speed, 
+						icon:playIcon } );
+						
+					actions.addItem({
+						type: "stop", 
+						name: "Motion:STOP", 
+						details: data.speed, 
+						icon:stopIcon});	
+					
+					actions.addItem({
+						type: "reverse", 
+						name: "Direction:TURN BACK", 
+						details: data.speed, 
+						icon:rewindIcon } );
+						
+					actions.addItem({
+						type: "halt", 
+						name: "Motion:EMERGENCY STOP", 
+						details: data.speed, 
+						icon:haltIcon } );
+					
+					actions.addItem({
+						type: "up", 
+						name: "Speed:UP", 
+						details: data.speed, 
+						icon:plusIcon } );
+						
+					actions.addItem({
+						type: "down", 
+						name: "Speed:DOWN", 
+						details: data.speed, 
+						icon:minusIcon } );	
+						
+					actions.addItem({
+						type: "query", 
+						name: "Info:INFORMATION FROM MODEL", 
+						details: data.speed, 
+						icon:textIcon } );	
+					
+						
+					break;	
+						
+					
+				case "Vagons":
+				
+					
+						
+					actions.addItem({
+						type: "switch", 
+						name: "LAMP:ON/OFF", 
+						details: data.speed, 
+						icon:powerIcon } );	
+						
+						
+					actions.addItem({
+						type: "query", 
+						name: "Info:INFORMATION FROM MODEL", 
+						details: data.speed, 
+						icon:textIcon } );	
+						
+						
+						
+						
+					break;	
+
+				}
+				
+				
+				
+				
+				
+				
+				
+			}
+
+			
+			private function disp_tech():void {
+			
+			
+				
+			
+				
+				
+			//private var stage: Stage 
+			stage.addEventListener(
+			StageOrientationEvent.ORIENTATION_CHANGING, onOrientationChanging );
+			stage.addEventListener( StageOrientationEvent.ORIENTATION_CHANGE,
+			onOrientationChange );
+			
+			}
+			
+			//Timer control by KovTam START
+			
+						private function init():void {
+							
+						//list.width = screenWidth;
+						
+						//list.width = stage.fullScreenWidth
+						
+						disp_tech();
+						
+						
+						
+						if (stage.width > stage.height) //trace(event.afterOrientation);
+						
+						
+						{
+						list.percentHeight = 35;			//landscape
+						}
+						else
+						{
+						list.percentHeight = 65;	//portrait*/
+						}
+						
+						
+						
+						
+						//if (data.subsys != "Locomotives") 
+						//{
+						//	SpeedSlider.visible = false;
+						//	actual_sp.visible = false;
+						//}
+						
+						
+						
+						
+						
+						
+						t = new Timer(1000);
+						t.addEventListener(TimerEvent.TIMER, updateTimer);
+						startTimer();
+						
+						t2 = new Timer(3000);
+						t2.addEventListener(TimerEvent.TIMER, updateTimer2);
+						
+						//t2.addEventListener(TimerEvent.TIMER_COMPLETE, t2TimerCtd);
+						
+						
+						//var tf:TextFormat = new TextFormat(); 
+						//tf.color = 0x0101DF; 
+
+						/* Apply this specific text format (red text) to the Label instance. */ 
+						//sysmes2.setStyle("textFormat", tf);
+						
+						subsys.setStyle("color", 0xFF0000);
+						
+						sysmes2.setStyle("color", 0x0101DF);
+						
+						
+						
+						//pipa.text = pathToFile;
+						//pipa.text = pathToFile+"\\"+"Locontrolpics"+"\\"+data.picture;
+						//devpic.source = pathToFile+"\\"+"Locontrolpics"+"\\"+data.picture;
+						//pipa.text = pathToFile + data.picture;
+						//devpic.source = pathToFile + data.picture;
+						
+						//pipa.text = data.picture;
+						//devpic.source = data.picture;
+						
+						
+						pipa.text = pathToFile+data.picture;
+						devpic.source = pathToFile+data.picture;
+						
+						
+						list.set_ipAddress(data.ipAddress);
+						
+						list.init_sytemMessage2 ("Dir: F Speed: 0");
+						
+						
+						}
+			
+						// it's good practice to separate event handler from functional method
+						private function updateTimer(evt:TimerEvent):void {
+							display (t.currentCount);
+							
+							
+							
+							
+							sysmes.text = list.get_sytemMessage();
+							
+							
+							//sysmes2.text = list.get_sytemMessage2();
+							
+							sysmes2.text = list.get_NMSysInd();
+							
+							
+							// Speed slide control manager START
+							
+							if (list.get_ListTouchInd() != 0) 
+							{
+								target_sp.text = "Target is: CLEARED";
+																						
+								speed_slide_status == "INACTIVE"
+											
+								speed_slide_st.text = "S.control: INACTIVE";
+								
+								slidersp_ex_allowed = false;
+								list.set_ListTouchInd(0);
+								
+							}
+							
+							
+							
+								if (speed_slide_status == "ACTIVE" && slidersp_ex_allowed == true) 
+									{
+								
+										
+										
+										if (actual_speed < target_speed - 1) 
+										{
+											
+											list.speed_up_req();
+											
+											
+										}
+										
+										if (actual_speed > target_speed + 1)
+										{
+											
+											list.speed_down_req();
+											
+										}
+										
+										
+										if (actual_speed == target_speed)
+										{
+											
+											target_sp.text = "Target is: PASSED";
+																						
+											speed_slide_status = "INACTIVE";
+											
+											speed_slide_st.text = "S.control: INACTIVE";
+											
+										}
+										
+										slidersp_ex_allowed = false;
+										
+									}
+							
+							
+							
+							
+							
+							
+							
+								// Speed slide control manager END
+								
+								
+								
+								
+							
+							
+							if (sysmes2.text == "Done!") 
+							{
+								
+								sysmes.text = list.get_NMSysMesAct();
+								
+								
+								var rawText:String;
+								
+								
+								rawText = list.get_NMSysMesAct();
+								
+								
+								var formattedText:String = "";
+								
+								
+								var directionTxt:String = rawText.substr(10+15, 1);
+								
+								
+								var levelTxt:String = rawText.substr(10+19, 1);
+								
+								
+								formattedText = "Actual Direction: " + directionTxt + "   Acual Speed: " + levelTxt;
+								
+								
+								sysmes3.text = formattedText;
+								
+								actions.getItemAt(0).details = formattedText;
+								
+								actions.getItemAt(2).details = "Actual Direction: " + directionTxt;
+								
+								actions.refresh();
+								
+								actual_speed = Number(levelTxt);
+																
+								
+								actual_sp.text = "Actual is:" + Math.round(actual_speed);
+								
+								actions.getItemAt(0).details = formattedText;
+								
+								list.invalidateDisplayList();
+								
+								//Speed slider animation influence START
+								
+								
+								if (speed_slide_status == "INACTIVE") 
+								{
+								
+								SpeedSlider.value = actual_speed;
+								
+								}
+								
+								slidersp_ex_allowed = true;
+								
+								
+								
+							}
+							
+							if (sysmes2.text == "Failed!") 
+							{
+								sysmes3.text = "Not updated";
+							}
+							
+							
+						}
+
+						private function display ( count : int ) : void {
+							var minutes : int = count / 60; // divide by 60 to get the minutes
+							var seconds : int = count % 60; // use modulo operator to get the "rest"
+							var min : String = minutes < 10 ? "0" + minutes : "" + minutes; // add leading zero if necessary
+							var sec : String = seconds < 10 ? "0" + seconds : "" + seconds;
+
+							counter.text = min + ":" + sec; // no need to cast to String if you use "" + something
+						
+							
+						}
+
+						private function startTimer():void {
+							t.start();
+						}
+						
+						
+
+						private function stopTimer():void {
+							t.stop();
+							t.reset();
+							display (0); // reset the display
+						}
+
+						private function startTimer2 ():void {
+							t2.start();
+						}
+						
+						private function updateTimer2 (evt:TimerEvent):void {
+							t2.stop();
+							timer2hasexprd = true;
+							
+						}
+			
+			
+			//Timer control by KovTam STOP
+			
+			protected function editBtn_clickHandler(event:MouseEvent):void
+				{
+			
+					device = srv.getItem(data.id);	
+					navigator.pushView(AddEditView,device);
+				}
+				
+			
+			
+				
+			protected function changeBtn_clickHandler(event:MouseEvent):void
+				{
+			
+					//SpeedSlider.visible = false;
+					//actual_sp.visible = false;
+					device = srv.getItem(data.id);	
+					navigator.pushView(AddEditView,device);
+				}	
+			
+			
+			
+			
+				protected function onOrientationChanging( event:StageOrientationEvent ):void
+				{
+						trace("The current orientation is "
+						+ event.beforeOrientation + " and is about to change to " +
+						event.afterOrientation );
+						/*if (event.afterOrientation == "default" || event.afterOrientation == "upsideDown") 
+						{
+							list.percentHeight = 60;	//portrait
+						}
+						
+						else list.percentHeight = 35;	//landscape
+						*/
+						
+				}
+ 
+				protected function onOrientationChange( event:StageOrientationEvent ):void
+				{
+						//sysmes.text = "The orientation was " + event.beforeOrientation + " and is now " + event.afterOrientation ;
+						
+						
+						trace(event.beforeOrientation);
+						trace(event.afterOrientation);
+						
+						//if (event.afterOrientation == "default" || event.afterOrientation == "upsideDown") 
+						
+						if (list.percentHeight == 35)
+						
+						{
+							list.percentHeight = 65;	//portrait
+						}
+						
+						else list.percentHeight = 35;	//landscape
+						
+						//sysmes.text = event.afterOrientation;
+						
+				}
+			
+			
+			
+			
+				
+			protected function onResizeView(event:ResizeEvent):void
+			{
+					//checkOrientation();
+			}
+			
+			protected function SpeedSliderdispatchEvent():void		// ------------------------------SLIDER CONTROL---------------------------
+			{
+                
+					
+					//sysmes.text = "Speed is:" + Math.round(SpeedSlider.value);
+					
+					target_speed = SpeedSlider.value;
+					
+					actual_sp.text = "Actual is:" + Math.round(actual_speed);
+					
+					target_sp.text = "Target is:" + Math.round(target_speed);
+					
+					speed_slide_status = "ACTIVE";
+					
+					speed_slide_st.text = "S.control: ACTIVE";
+					
+					slidersp_ex_allowed = true;
+					
+					//timer2hasexprd = false;
+					
+					//startTimer2 ();
+					
+					
+					
+			}
+			
+			
+			
+				
+				
+				
+			
+
+		]]>
+	</fx:Script>
+	
+	
+	<fx:Declarations>
+		<custom:DeviceDAO id="srv"/>
+		<custom:Device id="device"/>
+	</fx:Declarations>
+	
+	<s:states>
+		<s:State name="portrait"/>
+		<s:State name="landScapeView"/>
+	</s:states>
+	
+	
+	
+	<s:navigationContent>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/home.png')"
+				   click="navigator.popToFirstView()"/>
+		
+		
+		<s:Button id="changeBtn" icon="@Embed('/PackLocoCTRL/assets/info-2.png')" click="changeBtn_clickHandler(event)"/>
+		
+		
+        <s:Button id="editBtn" icon="@Embed('/PackLocoCTRL/assets/edit160.png')" click="editBtn_clickHandler(event)"/>
+		
+		<!--
+		
+		<s:Button id="deleteBtn3" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="navigator.pushView(DetailView)"/>
+		-->
+		<s:Spacer height="10"/>
+		
+	</s:navigationContent>
+	
+	
+	
+	
+	<s:Spacer height="10"/>
+	
+	
+	
+	<s:VGroup>
+	
+	
+	
+	
+	<s:HGroup paddingLeft="12" verticalAlign="middle" gap="12">
+		
+		<!--<s:Image source="c:/KOVTAM/LOCOnew001/src/PackLocoCTRL/assets/pics/{data.picture}"/>-->
+		<s:Image id="devpic"/>
+		
+		
+		
+		<s:VGroup>
+			<s:Spacer height="10"/>
+			<s:Label fontSize="20" fontWeight="bold" text="{data.firstName} {data.lastName}"/>
+			<s:Label text="{data.state1}"/>
+			<s:Label id="subsys" text="{data.subsys}"/>
+			<!--<s:Label text="/PackLocoCTRL/assets/pics/{data.picture}"/>-->
+			<s:Label id="pipa"  text="{data.picture}"/>
+			<s:Label id="counter" text="XX:XX"/>
+			<s:TextArea id="sysmes" width="280" height="35" text="System messages" editable="false"/>
+			<s:Label id="sysmes2" fontSize="15" fontWeight="bold" text="Dir: F Speed: 0"/>
+			<s:Label id="sysmes3" fontSize="15" fontWeight="bold" text="Not updated"/>
+		</s:VGroup>
+		
+		
+		
+		
+	</s:HGroup>
+	
+	<s:Spacer height="10"/>	
+	
+	<s:HGroup paddingLeft="20" gap="20">
+		<s:HSlider id="SpeedSlider" change="SpeedSliderdispatchEvent();"
+            liveDragging="true"
+            dataTipPrecision="0"/>
+		
+		<s:VGroup>
+        <s:Label id="actual_sp" text="Actual speed: -"/>	
+		<s:Label id="target_sp" text="Target speed: -"/>
+		<s:Label id="speed_slide_st" text="S.control: INACTIVE"/>	
+		</s:VGroup>	
+			
+		
+    </s:HGroup>	
+		
+	
+	
+	
+	</s:VGroup>
+	
+	
+		
+	<custom:SelectionList id="list" left="0"  right="0" bottom="0" autoLayout="true" percentHeight="65" dataProvider="{actions}">	
+		<custom:itemRenderer>
+			<fx:Component>
+				<s:IconItemRenderer
+					paddingTop="8" paddingBottom="8" verticalGap="6"
+					labelField="name" fontSize = "25"
+					messageField="details"
+					decorator="{data.icon}"/>
+			</fx:Component>
+		</custom:itemRenderer>	
+	</custom:SelectionList>	
+	
+	
+</s:View>

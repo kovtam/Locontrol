@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="LOCOntrol Home" xmlns:model="PackLocoCTRL.model.*"
+		creationComplete="init()">
+	
+	<fx:Declarations>
+		<model:DeviceDAO id="srv"/>
+		<model:Device id="device"/>
+	</fx:Declarations>
+	
+	
+	
+	
+	
+	<s:titleContent>
+		<s:TextInput id="key" width="100%"/>
+	</s:titleContent>
+	
+	<s:actionContent>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/search160.png')" click="data=srv.findByName(key.text)"/> 
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/add160.png')" click="btnToAdm_clickHandler(event)"/>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/upload.png')" click="btnToExit_clickHandler(event)"/>
+	</s:actionContent>
+	
+	<s:navigationContent>
+		<s:Label text="LOCONTROL"/>
+	</s:navigationContent>	
+		
+	<fx:Script>
+      <![CDATA[
+         
+		
+		private function init():void {
+		
+			data = srv.findByName("");
+			
+		}
+	  
+	  
+		protected function btnToAdm_clickHandler(event:MouseEvent):void
+		{
+			
+		//device = srv.getItem(0);	
+		data = null;
+		device = null;
+		navigator.pushView(AddEditView,device);
+		}
+		 
+		protected function btnToExit_clickHandler(event:MouseEvent):void
+		{
+			
+		//device = srv.getItem(0);	
+		NativeApplication.nativeApplication.exit();
+		}
+		 
+		 
+      ]]>
+   </fx:Script>
+	
+	
+	
+	
+	
+	<s:List id="list" top="0" bottom="0" left="0" right="0"
+			dataProvider="{data}"
+			change="navigator.pushView(EmployeeDetails, list.selectedItem)">
+			
+		
+		<s:itemRenderer>
+			<fx:Component>
+				
+				
+				
+				
+				
+				<s:IconItemRenderer 
+					label="{data.firstName} {data.lastName}"
+					
+					
+					
+					messageField="ipAddress"/>
+				
+				
+				
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+
+</s:View>

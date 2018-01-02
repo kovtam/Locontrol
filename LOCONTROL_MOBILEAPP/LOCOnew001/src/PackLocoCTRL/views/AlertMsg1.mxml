@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Alert MSG" xmlns:model="PackLocoCTRL.model.*"
+		add="view1_addHandler(event)">
+	
+	
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+	<fx:Declarations>
+		
+		<model:DeviceDAO id="srv"/>
+		<model:Device id="device"/>
+		
+		
+		
+		
+        <fx:Component className="AlertMsg">
+            <s:SkinnablePopUpContainer x="70" y="300">
+                <s:TitleWindow title="Confirmation request" close="close()">
+					
+					
+					
+                    <s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+                        <s:Label text="Are you sure to delete and recreate database?"/>
+						
+						<s:HGroup>
+						
+						 
+							
+                        <s:Button id="okbut" label="OK" click="close(true, 1)"/>
+						<s:Button label="CANCEL" click="close()"/>
+						</s:HGroup>
+						
+                    </s:VGroup>
+                </s:TitleWindow>
+            </s:SkinnablePopUpContainer>
+        </fx:Component>
+		
+		<fx:Component className="InfoMsg">
+            <s:SkinnablePopUpContainer x="70" y="300">
+                <s:TitleWindow title="Information" close="close()">
+                    <s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+                        <s:Label text="Datbase created successfully!"/>
+						
+						
+                        <s:Button label="OK" click="close()"/>
+						
+						
+                    </s:VGroup>
+                </s:TitleWindow>
+            </s:SkinnablePopUpContainer>
+        </fx:Component>
+		
+	
+		<fx:Component className="AlertMsg2">
+            <s:SkinnablePopUpContainer x="70" y="300">
+                <s:TitleWindow title="Confirmation request" close="close()">
+					
+					
+					
+                    <s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+                        <s:Label text="Are you sure to delete this model from BD?"/>
+						
+						<s:HGroup>
+						
+						 
+							
+                        <s:Button id="okbut" label="OK" click="close(true, 1)"/>
+						<s:Button label="CANCEL" click="close()"/>
+						</s:HGroup>
+						
+                    </s:VGroup>
+                </s:TitleWindow>
+            </s:SkinnablePopUpContainer>
+        </fx:Component>
+		
+		<fx:Component className="InfoMsg2">
+            <s:SkinnablePopUpContainer x="70" y="300">
+                <s:TitleWindow title="Information" close="close()">
+                    <s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+                        <s:Label text="Model removed from DB successfully!"/>
+						
+						
+                        <s:Button label="OK" click="close()"/>
+						
+						
+                    </s:VGroup>
+                </s:TitleWindow>
+            </s:SkinnablePopUpContainer>
+        </fx:Component>
+		
+	
+		
+		
+    </fx:Declarations>
+		
+		
+	
+	
+	<s:navigationContent>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/home.png')"
+				  click="navigator.popToFirstView()"/>
+		
+		
+        <!--<s:Button id="deleteBtn" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="deleteBtn_clickHandler(event)"/>-->
+		
+		<!--<s:Button id="backBtn" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="navigator.popToFirstView()"/>-->
+		
+		<!--<s:Button id="backBtn2" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="backBtn2_clickHandler(event)"/>-->
+		
+		
+	</s:navigationContent>
+	
+	<s:layout>
+        <s:VerticalLayout paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" gap="10"
+                          horizontalAlign="center" verticalAlign="top"/>
+    </s:layout>
+	
+	<s:TextArea id="myTA" text="Selected model:{device.firstName} {device.lastName} {device.id}"
+                width="98%" editable="false"/>
+    <s:Button label="CREATE DB" click="resetDbBtn_clickHandler(event)"/>
+	<s:Button label="DELETE MODEL FROM DB" click="deleteModelFromDbBtn_clickHandler(event)"/>
+	
+	<!--<s:Button label="NETWORK TEST" click="netwTestBtn_clickHandler(event)"/>-->
+	
+	<s:Button label="CANCEL" click="navigator.popView()"/>
+	
+	<fx:Script>
+      <![CDATA[
+         
+		// Import the MyAlertPopUp class.
+         //   import myComponents.MyAlertPopUpReturn;
+		 
+			import mx.events.FlexEvent;
+			import PackLocoCTRL.model.Device;
+		 
+            import spark.events.PopUpEvent;
+	  
+		//public	var sw:int=0;	
+		
+		protected function view1_addHandler(event:FlexEvent):void
+         {
+            if(data==null)
+            {
+               //currentState = "Add";
+			   //title="Add Model";
+            }
+            else
+            {
+               //currentState="Edit";
+               //device = device;
+			   device.id = data.id;
+			   device.firstName = data.firstName;
+			   device.lastName = data.lastName;
+			   //device.subsys = data.subsys;
+			   //device.ipAddress = data.ipAddress;
+			   //device.state1 = data.state1;
+			   //device.picture = data.picture;
+               //title="Edit Model";
+            }
+         }
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	  
+         protected function backBtn2_clickHandler(event:MouseEvent):void
+         {
+            
+			 
+			 
+			 
+			 
+			 
+			 
+			 navigator.popView();
+         }
+         protected function deleteBtn_clickHandler(event:MouseEvent):void
+         {
+           // deleteEmployeeResult.token = employeeService.deleteEmployee(data as int);
+         }
+		 
+		 
+		 protected function resetDbBtn_clickHandler(event:MouseEvent):void
+         {
+           
+			 
+			 
+				// Create an instance of MyAlertPopUp.
+                //var alertDB:MyAlertPopUpReturn = new MyAlertPopUpReturn();
+                
+				var alertDB:AlertMsg = new AlertMsg();
+				
+                // Add an event handler for the close event to check for 
+                // any returned data.
+                alertDB.addEventListener('close', alertDB_closeHandler);
+                alertDB.open(this, true);
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 
+			 //alme:Boolean;
+			 
+			 //new AlertMsg().open(this, true);
+			 //
+			 //srv.populateDatabase();
+			 //
+			 //new InfoMsg().open(this, true);
+			 
+			 
+         }
+		 
+		 
+		 
+		 
+		 
+		 protected function deleteModelFromDbBtn_clickHandler(event:MouseEvent):void
+         {
+           
+			 
+			 
+				// Create an instance of MyAlertPopUp.
+                //var alertDB:MyAlertPopUpReturn = new MyAlertPopUpReturn();
+                
+				var alertDB:AlertMsg2 = new AlertMsg2();
+				
+                // Add an event handler for the close event to check for 
+                // any returned data.
+                alertDB.addEventListener('close', alertDB_2_closeHandler);
+                alertDB.open(this, true);
+			 
+			 
+			 
+			 
+         }
+		 
+		  // Handle the close event from the SkinnablePopUpContainer.
+            protected function alertDB_closeHandler(event:PopUpEvent):void {
+                // If commit is false, do data is returned.
+                if (!event.commit)
+                    return;
+                
+                // Write the returned String to the TextArea control.
+                //myTA.text = event.data as String;
+				
+				//srv.openDatabase("DeviceDirectory.db");
+				srv.clearDatabase();
+				srv.populateDatabase();
+				
+				
+				
+				myTA.text = "Database reset DONE!";
+				new InfoMsg().open(this, true);
+            }            
+		 
+			
+			
+			protected function alertDB_2_closeHandler(event:PopUpEvent):void {
+                // If commit is false, do data is returned.
+                if (!event.commit)
+                    return;
+                
+                // Write the returned String to the TextArea control.
+                //myTA.text = event.data as String;
+				
+				//srv.openDatabase("DeviceDirectory.db");
+				//srv.clearDatabase();
+				var resultsw:int=0;
+				
+				resultsw = srv.deleteDevice(device,device.id);
+				
+				if (resultsw == 1) 
+			
+				{
+					
+				myTA.text = "Model deletion DONE!";
+				new InfoMsg2().open(this, true);	
+				
+				//navigator.popToFirstView();
+				
+				//navigator.pushView(AlertMsg1);
+				}
+			
+				else
+				{
+				myTA.text = "Model deletion FAILED!";
+				//navigator.popView();
+				}	
+				
+				
+            }            
+			
+			
+			
+			
+			protected function netwTestBtn_clickHandler(event:MouseEvent):void
+         {
+          
+			 //var kiir_URL:URLRequest=new URLRequest("http://192.168.4.1/?pin=STOP");
+				//var olvas_Loader:URLLoader = new URLLoader();
+												//
+												//olvas_Loader.load(kiir_URL);
+			 
+			 
+			 
+			 
+			 
+         }
+			
+			
+			
+			
+			
+			
+			
+		 
+		 
+         //protected function deleteEmployeeResult_resultHandler(event:ResultEvent):void
+         //{
+            //navigator.popView();
+         //}
+      ]]>
+   </fx:Script>
+	
+	
+	
+	
+</s:View>

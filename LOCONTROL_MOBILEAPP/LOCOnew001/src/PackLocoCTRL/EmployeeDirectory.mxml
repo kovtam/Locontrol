@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ViewNavigatorApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" firstView="PackLocoCTRL.views.EmployeeDirectoryHome"
+					 splashScreenImage="PackLocoCTRL.views.DynamicSplashScreen" splashScreenMinimumDisplayTime="5000">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	<s:navigationContent>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/home.png')"
+				  click="navigator.popToFirstView()"/>
+	</s:navigationContent>
+	
+</s:ViewNavigatorApplication>
+
+

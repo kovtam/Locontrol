@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Add Edit Model" xmlns:model="PackLocoCTRL.model.*"
+		add="view1_addHandler(event)">
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		
+		
+		<model:Device id="device"/>
+		<model:Device id="shd"/>
+		<model:DeviceDAO id="srv"/>
+		
+		
+				
+	</fx:Declarations>
+	
+	
+	<s:layout>
+        <s:VerticalLayout/>
+    </s:layout>
+	
+	
+	<s:navigationContent>
+		<s:Button icon="@Embed('/PackLocoCTRL/assets/home.png')"
+				  click="navigator.popToFirstView()"/>
+		
+		
+        <s:Button id="deleteBtn" icon="@Embed('/PackLocoCTRL/assets/delete160.png')" click="deleteBtn_clickHandler(event)"/>
+		
+		
+		<s:Button id="dbResetBtn" icon="@Embed('/PackLocoCTRL/assets/edit160.png')" click="dbResetBtn_clickHandler(event)"/>
+		
+		
+		<!--<s:Button id="backBtn2" icon="@Embed('/PackLocoCTRL/assets/home.png')" click="backBtn2_clickHandler(event)"/>-->
+		
+	</s:navigationContent>
+	
+	<s:states>
+      <s:State name="Add"/>
+      <s:State name="Edit"/>
+   </s:states>
+	
+	<fx:Script>
+      <![CDATA[
+         
+		
+		
+		
+		import mx.events.FlexEvent;
+		import PackLocoCTRL.model.Device;
+		
+		
+	
+	
+		 
+		protected function saveBtn_clickHandler(event:MouseEvent):void
+		{
+			
+			var resultsw:int=0;
+			
+			if(currentState=="Add")
+				{
+					
+				//var shd:Device;
+				
+				shd.firstName = TIfirstName.text;
+				shd.lastName = TIlastName.text;	
+				shd.subsys = TIsubsystem.text;
+				shd.ipAddress = TIipAddress.text;
+				shd.state1 = TIstate1.text;
+				shd.picture = TIpicture.text;
+				
+				shd.id = 0;
+				shd.loaded = false;
+				shd.sw1 = "OFF";
+				shd.sw2 = "OFF";
+				shd.direction = "FWD";
+				
+				
+					
+				resultsw = srv.createDevice(shd);
+				}
+			else
+				{
+				resultsw = srv.updateDevice(device,device.id);
+				}	
+				
+				
+			if (resultsw == 1) 
+			
+			{
+			navigator.popToFirstView();
+			}
+			
+			else
+			{
+			navigator.popView();
+			}	
+				
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		 
+		 
+		 
+         protected function cancelBtn_clickHandler(event:MouseEvent):void
+         {
+            navigator.popView();      
+         }   
+      
+	  
+	  
+	  
+	  
+	  
+	  
+		
+	  
+	  
+	  
+	  
+         protected function backBtn2_clickHandler(event:MouseEvent):void
+         {
+            navigator.popView();
+         }
+         protected function deleteBtn_clickHandler(event:MouseEvent):void
+         {
+           // deleteEmployeeResult.token = employeeService.deleteEmployee(data as int);
+		   navigator.pushView(AlertMsg1,device);
+         }
+		 
+		 
+		 protected function dbResetBtn_clickHandler(event:MouseEvent):void
+         {
+           
+			navigator.pushView(AlertMsg1);
+			 
+         }
+		 
+		 
+		 
+		 
+		 
+         /*protected function deleteEmployeeResult_resultHandler(event:ResultEvent):void
+         {
+            //navigator.popView();
+         }*/
+		 
+		 
+		 
+		 protected function view1_addHandler(event:FlexEvent):void
+         {
+            if(data==null)
+            {
+               currentState = "Add";
+			   title="Add Model";
+            }
+            else
+            {
+               currentState="Edit";
+               //device = device;
+			   device.id = data.id;
+			   device.firstName = data.firstName;
+			   device.lastName = data.lastName;
+			   device.subsys = data.subsys;
+			   device.ipAddress = data.ipAddress;
+			   device.state1 = data.state1;
+			   device.picture = data.picture;
+               title="Edit Model";
+            }
+         }
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+      ]]>
+   </fx:Script>
+	
+	
+	
+	
+	
+	<s:Scroller left="0" right="0" top="0" bottom="{saveBtn.height+10}">
+		
+	
+		
+      <s:VGroup width="100%" gap="10" paddingLeft="15" paddingRight="15">
+		  
+		 
+		  
+         <s:Label fontWeight="bold" text="First Name:" paddingTop="15"/>
+         <s:TextInput id="TIfirstName" width="100%" text="@{device.firstName}"/>
+		  
+         <s:Label fontWeight="bold" text="Last Name:" paddingTop="15"/>
+         <s:TextInput id="TIlastName" width="100%" text="@{device.lastName}"/>
+		  
+		 <s:Label fontWeight="bold" text="Subsystem:" paddingTop="15"/>
+         <s:TextInput id="TIsubsystem" width="100%" text="@{device.subsys}"/>
+		  
+		 <s:Label id="LBipAddress" fontWeight="bold" text="IP Address:" paddingTop="15"/>
+         <s:TextInput id="TIipAddress" width="100%" text="@{device.ipAddress}"/>  
+		  
+		 <s:Label fontWeight="bold" text="Administrative status:" paddingTop="15"/>
+         <s:TextInput id="TIstate1" width="100%" text="@{device.state1}"/>   
+		  
+		 <s:Label fontWeight="bold" text="Picture file path:" paddingTop="15"/>
+         <s:TextInput id="TIpicture" width="100%" text="@{device.picture}"/>  
+		  
+		  
+		
+         
+      </s:VGroup>
+		
+		
+		
+   </s:Scroller>
+	
+	<s:Spacer height="20"/>
+	
+	
+	
+	
+	<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+	
+		<s:HGroup horizontalAlign="center" gap="30">
+			
+			
+	
+   <s:Button id="saveBtn" label="Save" 
+           click="saveBtn_clickHandler(event)">
+      <s:icon>
+         <s:MultiDPIBitmapSource 
+source160dpi="@Embed('/PackLocoCTRL/assets/save160.png')"
+source240dpi="@Embed('/PackLocoCTRL/assets/save240.png')"
+source320dpi="@Embed('/PackLocoCTRL/assets/save320.png')"/>
+      </s:icon>
+	   
+	
+	   
+	
+   </s:Button>
+   
+    
+   
+   <s:Button id="cancelBtn" label="Cancel" 
+           click="cancelBtn_clickHandler(event)">
+      <s:icon>
+         <s:MultiDPIBitmapSource
+source160dpi="@Embed('/PackLocoCTRL/assets/cancel160.png')"
+source240dpi="@Embed('/PackLocoCTRL/assets/cancel240.png')"
+source320dpi="@Embed('/PackLocoCTRL/assets/cancel320.png')"/>			 
+      </s:icon>
+   </s:Button>
+		
+	
+		</s:HGroup>
+	</s:VGroup>
+		
+		
+</s:View>
