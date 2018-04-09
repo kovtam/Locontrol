@@ -5,6 +5,8 @@ ESP8266 powered N scale model locomotive.
 
 Model can be controlled either by web interface from browser or Android mobile application.
 
+Mobile app powered by FlashDevelop free and opensource IDE: http://www.flashdevelop.org
+
 Youtube links:
 
 https://www.youtube.com/watch?v=dHKTCIkRs_4
